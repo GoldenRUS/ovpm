@@ -105,11 +105,49 @@ func stoui64(s string) uint64 {
 
 // stodt converts string to date time.
 func stodt(s string) time.Time {
-	t, err := time.ParseInLocation(time.ANSIC, s, time.Local)
-	if err != nil {
-		panic(err)
+	if s == "" {
+		return time.Time{}
 	}
-	return t
+
+	// Удаляем лишние пробелы
+	s = strings.TrimSpace(s)
+
+	// Попробуем стандартные форматы в порядке вероятности использования
+	formats := []string{
+		"2006-01-02 15:04:05",  // Самый распространенный для логов
+		"2006-01-02T15:04:05",  // ISO без зоны
+		time.RFC3339,           // Полный ISO
+		"02.01.2006 15:04:05",  // С точками
+		"2006/01/02 15:04:05",  // Со слешами
+		time.ANSIC,             // Unix формат
+		"Jan _2 15:04:05 2006", // Упрощенный Unix формат
+		"2006-01-02",           // Только дата
+	}
+
+	// Сначала попробуем в локальной зоне (более вероятно для логов)
+	for _, format := range formats {
+		if t, err := time.ParseInLocation(format, s, time.Local); err == nil {
+			return t
+		}
+	}
+
+	// Попробуем парсить как timestamp (число секунд с эпохи)
+	if sec, err := strconv.ParseInt(s, 10, 64); err == nil {
+		return time.Unix(sec, 0)
+	}
+
+	// Попробуем парсить как timestamp с миллисекундами
+	if millis, err := strconv.ParseInt(s, 10, 64); err == nil && millis > 1000000000000 {
+		return time.Unix(millis/1000, (millis%1000)*1000000)
+	}
+
+	// Последняя попытка - пусть Go сам определит формат
+	if t, err := time.Parse(time.RFC3339, s); err == nil {
+		return t
+	}
+
+	logrus.WithField("time_string", s).Warn("Failed to parse time string")
+	return time.Time{}
 }
 
 // trim will trim all leading and trailing whitespace from the s.
