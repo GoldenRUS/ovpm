@@ -609,6 +609,24 @@ export default class AdminDashboard extends React.Component {
         </span>
       );
 
+        let statistics;
+        if (this.state.users[i]?.is_connected) {
+            const user = this.state.users[i];
+
+            const bytesSent = parseFloat(user.bytes_sent) || 0;
+            const bytesReceived = parseFloat(user.bytes_received) || 0;
+            const sentMbps = (bytesSent / 1024 / 1024).toFixed(2);
+            const receivedMbps = (bytesReceived / 1024 / 1024).toFixed(2);
+
+            const connectedSince = user.connected_since ?
+                moment(user.connected_since).fromNow() :
+                'unknown time';
+
+            statistics = `Connected, ${connectedSince}, Sent/Received (Mbps) ${sentMbps}/${receivedMbps}`;
+        } else {
+            statistics = "Disconnected";
+        }
+
       users.push(
         <tr key={"user" + i}>
           <td>{i + 1}</td>
@@ -621,6 +639,7 @@ export default class AdminDashboard extends React.Component {
           <td>{createdAt}</td>
           <td>{certExpiry}</td>
           <td className="mui--align-middle">{noGW}</td>
+            <td>{statistics}</td>
           <td>
             <a style={{ "padding-left": "5px" }}>
               <span
@@ -823,6 +842,7 @@ export default class AdminDashboard extends React.Component {
                         <th>CREATED AT</th>
                         <th>CERT</th>
                         <th>PUSH GATEWAY</th>
+                          <th>STATISTICS</th>
                         <th>ACTIONS</th>
                       </tr>
                     </thead>
