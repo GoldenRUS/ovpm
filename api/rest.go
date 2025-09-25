@@ -82,7 +82,49 @@ func NewRESTServer(grpcPort string) (http.Handler, context.CancelFunc, error) {
 	mux.Handle("/", http.FileServer(
 		&assetfs.AssetFS{Asset: bundle.Asset, AssetDir: bundle.AssetDir, Prefix: "bundle"}))
 
+	mux.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.HasPrefix(r.URL.Path, "/api/") {
+			mware.ServeHTTP(w, r)
+			return
+		}
+
+		if isStaticFile(r.URL.Path) {
+			http.FileServer(&assetfs.AssetFS{
+				Asset:    bundle.Asset,
+				AssetDir: bundle.AssetDir,
+				Prefix:   "bundle",
+			}).ServeHTTP(w, r)
+			return
+		}
+
+		data, err := bundle.Asset("bundle/index.html")
+		if err != nil {
+			http.NotFound(w, r)
+			return
+		}
+		w.Header().Set("Content-Type", "text/html")
+		w.Write(data)
+	}))
+
 	return allowCORS(mux), cancel, nil
+}
+
+func isStaticFile(path string) bool {
+	staticExtensions := []string{".js", ".css", ".png", ".jpg", ".jpeg", ".gif", ".ico", ".woff", ".woff2", ".ttf", ".svg"}
+	for _, ext := range staticExtensions {
+		if strings.HasSuffix(path, ext) {
+			return true
+		}
+	}
+
+	staticPaths := []string{"/css/", "/js/", "/fonts/", "/images/"}
+	for _, prefix := range staticPaths {
+		if strings.HasPrefix(path, prefix) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func specsHandler(w http.ResponseWriter, r *http.Request) {
@@ -113,53 +155,6 @@ func specsHandler(w http.ResponseWriter, r *http.Request) {
 			logrus.Warn(err)
 		}
 		w.Write(vpnData)
-	}
-}
-
-func webuiHandler(w http.ResponseWriter, r *http.Request) {
-	switch r.URL.Path {
-	case "/bundle.js":
-		userData, err := bundle.Asset("bundle/bundle.js")
-		if err != nil {
-			logrus.Warn(err)
-		}
-		w.Header().Set("Content-Type", "application/javascript")
-		w.Write(userData)
-	case "/js/mui.min.js":
-		userData, err := bundle.Asset("bundle/js/mui.min.js")
-		if err != nil {
-			logrus.Warn(err)
-		}
-		w.Header().Set("Content-Type", "application/javascript")
-		w.Write(userData)
-	case "/css/bootstrap.min.css":
-		userData, err := bundle.Asset("bundle/css/bootstrap.min.css")
-		if err != nil {
-			logrus.Warn(err)
-		}
-		w.Header().Set("Content-Type", "text/css")
-		w.Write(userData)
-	case "/css/mui.min.css":
-		userData, err := bundle.Asset("bundle/css/mui.min.css")
-		if err != nil {
-			logrus.Warn(err)
-		}
-		w.Header().Set("Content-Type", "text/css")
-		w.Write(userData)
-	case "/fonts/glyphicons-halflings-regular.woff":
-		userData, err := bundle.Asset("bundle/glyphicons-halflings-regular.woff")
-		if err != nil {
-			logrus.Warn(err)
-		}
-		w.Header().Set("Content-Type", "application/font-woff")
-		w.Write(userData)
-
-	default:
-		networkData, err := bundle.Asset("bundle/index.html")
-		if err != nil {
-			logrus.Warn(err)
-		}
-		w.Write(networkData)
 	}
 }
 
