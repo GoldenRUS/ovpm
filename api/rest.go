@@ -79,8 +79,6 @@ func NewRESTServer(grpcPort string) (http.Handler, context.CancelFunc, error) {
 		Path:     "auth",
 	}, mware)
 	mux.Handle("/api/", mware)
-	mux.Handle("/", http.FileServer(
-		&assetfs.AssetFS{Asset: bundle.Asset, AssetDir: bundle.AssetDir, Prefix: "bundle"}))
 
 	mux.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if strings.HasPrefix(r.URL.Path, "/api/") {
