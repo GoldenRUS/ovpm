@@ -79,7 +79,7 @@ export default class AdminDashboard extends React.Component {
             possibleAssocUsers: [],
             possibleDissocUsers: [],
             autoRefreshEnabled: true,
-            refreshInterval: 5000
+            refreshInterval: 5000 // 5 секунд по умолчанию
         };
         let authToken = GetAuthToken();
         this.api = new API(baseURL, endpoints, authToken);
@@ -898,7 +898,7 @@ export default class AdminDashboard extends React.Component {
                                             + Create User
                                         </Button>
 
-                                        {}
+                                        {/* Контролы автообновления */}
                                         <div className="mui--pull-right" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                             <select
                                                 value={this.state.refreshInterval / 1000}
