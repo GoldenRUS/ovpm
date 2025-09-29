@@ -680,10 +680,18 @@ export default class AdminDashboard extends React.Component {
                 const received = formatTraffic(user.bytes_received);
                 const connectedSince = user.connected_since ? moment(user.connected_since).fromNow() : 'unknown';
 
+                // Форматирование скорости
+                const txSpeed = formatTraffic(user.tx || 0);
+                const rxSpeed = formatTraffic(user.rx || 0);
+
                 statistics = (
                     <span title={`Connected since: ${connectedSince}\nUpload: ${sent.value} ${sent.unit}\nDownload: ${received.value} ${received.unit}`}>
             🔗 📤{sent.value}{sent.unit} / 📥{received.value}{received.unit}
-          </span>
+                        <br />
+            <span title="average for 5 sec">
+                ↑{txSpeed.value}{txSpeed.unit} / ↓{rxSpeed.value}{rxSpeed.unit}
+            </span>
+        </span>
                 );
             } else {
                 statistics = <span title="Disconnected">❌</span>;
