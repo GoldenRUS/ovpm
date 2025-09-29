@@ -2,91 +2,91 @@
 
 ## [v0.2.11]
 
-- Make sure ovpmd listens on IPv4 interfaces [#108](https://github.com/GoldenRUS/ovpm/issues/108)
+- Make sure ovpmd listens on IPv4 interfaces [#108](https://github.com/cad/ovpm/issues/108)
 
-## [v0.2.10](https://github.com/GoldenRUS/ovpm/tree/v0.2.10)
+## [v0.2.10](https://github.com/cad/ovpm/tree/v0.2.10)
 
-- Fix ovpmd not starting error on Ubuntu. [#99](https://github.com/GoldenRUS/ovpm/issues/99)
+- Fix ovpmd not starting error on Ubuntu. [#99](https://github.com/cad/ovpm/issues/99)
 
-## [v0.2.9](https://github.com/GoldenRUS/ovpm/tree/v0.2.9)
+## [v0.2.9](https://github.com/cad/ovpm/tree/v0.2.9)
 
 - CLI options to enable comp-lzo back.
 - Minor fixes.
 
-## [v0.2.8](https://github.com/GoldenRUS/ovpm/tree/v0.2.8)
+## [v0.2.8](https://github.com/cad/ovpm/tree/v0.2.8)
 
-- WebUI: dependency updates and switched to yarn (thanks to @drac) [\#92](https://github.com/GoldenRUS/ovpm/pull/92)
+- WebUI: dependency updates and switched to yarn (thanks to @drac) [\#92](https://github.com/cad/ovpm/pull/92)
 - CI: switched to Github Actions
 - comp-lzo is now disabled by default (thanks to @archaron) [\#81](#81)
 - Minor fixes.
 
 
-## [v0.2.7](https://github.com/GoldenRUS/ovpm/tree/v0.2.7)
+## [v0.2.7](https://github.com/cad/ovpm/tree/v0.2.7)
 
-[Full Changelog](https://github.com/GoldenRUS/ovpm/compare/v0.2.6...v0.2.7)
+[Full Changelog](https://github.com/cad/ovpm/compare/v0.2.6...v0.2.7)
 
 **Implemented enhancements:**
 
-- webui:  make sure webui fetches all assets from the ovpm http server [\#65](https://github.com/GoldenRUS/ovpm/issues/65)
-- Information about certificates expiration.... [\#59](https://github.com/GoldenRUS/ovpm/issues/59)
-- add '\*' wildcard option to cli for bulk operations [\#46](https://github.com/GoldenRUS/ovpm/issues/46)
-- show connected users [\#40](https://github.com/GoldenRUS/ovpm/issues/40)
-- add cli tests [\#38](https://github.com/GoldenRUS/ovpm/issues/38)
+- webui:  make sure webui fetches all assets from the ovpm http server [\#65](https://github.com/cad/ovpm/issues/65)
+- Information about certificates expiration.... [\#59](https://github.com/cad/ovpm/issues/59)
+- add '\*' wildcard option to cli for bulk operations [\#46](https://github.com/cad/ovpm/issues/46)
+- show connected users [\#40](https://github.com/cad/ovpm/issues/40)
+- add cli tests [\#38](https://github.com/cad/ovpm/issues/38)
 
 **Fixed bugs:**
 
-- web ui: when user list is long, some usernames are not visible in dropdown [\#64](https://github.com/GoldenRUS/ovpm/issues/64)
-- on centos there is no nogroup group defined [\#62](https://github.com/GoldenRUS/ovpm/issues/62)
+- web ui: when user list is long, some usernames are not visible in dropdown [\#64](https://github.com/cad/ovpm/issues/64)
+- on centos there is no nogroup group defined [\#62](https://github.com/cad/ovpm/issues/62)
 
 **Closed issues:**
 
-- install fresh TUNTAP error [\#61](https://github.com/GoldenRUS/ovpm/issues/61)
-- Not work depot [\#60](https://github.com/GoldenRUS/ovpm/issues/60)
-- All Set, but from VPN Client i can´t reach other network... [\#58](https://github.com/GoldenRUS/ovpm/issues/58)
+- install fresh TUNTAP error [\#61](https://github.com/cad/ovpm/issues/61)
+- Not work depot [\#60](https://github.com/cad/ovpm/issues/60)
+- All Set, but from VPN Client i can´t reach other network... [\#58](https://github.com/cad/ovpm/issues/58)
 
-## [v0.2.6](https://github.com/GoldenRUS/ovpm/tree/v0.2.6) (2017-10-16)
-[Full Changelog](https://github.com/GoldenRUS/ovpm/compare/v0.2.5...v0.2.6)
+## [v0.2.6](https://github.com/cad/ovpm/tree/v0.2.6) (2017-10-16)
+[Full Changelog](https://github.com/cad/ovpm/compare/v0.2.5...v0.2.6)
 
 **Fixed bugs:**
 
-- ccd emit doesn't work correctly [\#57](https://github.com/GoldenRUS/ovpm/issues/57)
+- ccd emit doesn't work correctly [\#57](https://github.com/cad/ovpm/issues/57)
 
-## [v0.2.5](https://github.com/GoldenRUS/ovpm/tree/v0.2.5) (2017-10-13)
-[Full Changelog](https://github.com/GoldenRUS/ovpm/compare/v0.2.4...v0.2.5)
+## [v0.2.5](https://github.com/cad/ovpm/tree/v0.2.5) (2017-10-13)
+[Full Changelog](https://github.com/cad/ovpm/compare/v0.2.4...v0.2.5)
 
 **Implemented enhancements:**
 
-- WARNING: INSECURE cipher with block size less than 128 bit \(64 bit\).  [\#56](https://github.com/GoldenRUS/ovpm/issues/56)
-- expose vpn restart functionality over api [\#50](https://github.com/GoldenRUS/ovpm/issues/50)
+- WARNING: INSECURE cipher with block size less than 128 bit \(64 bit\).  [\#56](https://github.com/cad/ovpm/issues/56)
+- expose vpn restart functionality over api [\#50](https://github.com/cad/ovpm/issues/50)
 
 **Fixed bugs:**
 
-- WEBUI \> NETWORKS [\#55](https://github.com/GoldenRUS/ovpm/issues/55)
-- block giving vpn server's internal ip to some user as static ip [\#54](https://github.com/GoldenRUS/ovpm/issues/54)
-- when starting ensure emit [\#51](https://github.com/GoldenRUS/ovpm/issues/51)
+- WEBUI \> NETWORKS [\#55](https://github.com/cad/ovpm/issues/55)
+- block giving vpn server's internal ip to some user as static ip [\#54](https://github.com/cad/ovpm/issues/54)
+- when starting ensure emit [\#51](https://github.com/cad/ovpm/issues/51)
 
-## [v0.2.4](https://github.com/GoldenRUS/ovpm/tree/v0.2.4) (2017-10-06)
-[Full Changelog](https://github.com/GoldenRUS/ovpm/compare/v0.2.3...v0.2.4)
-
-**Fixed bugs:**
-
-- allow update if the target ip is user's already statically allocated ip [\#49](https://github.com/GoldenRUS/ovpm/issues/49)
-
-## [v0.2.3](https://github.com/GoldenRUS/ovpm/tree/v0.2.3) (2017-10-06)
-[Full Changelog](https://github.com/GoldenRUS/ovpm/compare/v0.2.2...v0.2.3)
-
-## [v0.2.2](https://github.com/GoldenRUS/ovpm/tree/v0.2.2) (2017-10-05)
-[Full Changelog](https://github.com/GoldenRUS/ovpm/compare/v0.2.1...v0.2.2)
-
-## [v0.2.1](https://github.com/GoldenRUS/ovpm/tree/v0.2.1) (2017-10-04)
-[Full Changelog](https://github.com/GoldenRUS/ovpm/compare/v0.2.0...v0.2.1)
-
-## [v0.2.0](https://github.com/GoldenRUS/ovpm/tree/v0.2.0) (2017-10-03)
-[Full Changelog](https://github.com/GoldenRUS/ovpm/compare/v0.1.18...v0.2.0)
+## [v0.2.4](https://github.com/cad/ovpm/tree/v0.2.4) (2017-10-06)
+[Full Changelog](https://github.com/cad/ovpm/compare/v0.2.3...v0.2.4)
 
 **Fixed bugs:**
 
-- Ubuntu Group needs to be "nogroup" [\#48](https://github.com/GoldenRUS/ovpm/issues/48)
+- allow update if the target ip is user's already statically allocated ip [\#49](https://github.com/cad/ovpm/issues/49)
+
+## [v0.2.3](https://github.com/cad/ovpm/tree/v0.2.3) (2017-10-06)
+[Full Changelog](https://github.com/cad/ovpm/compare/v0.2.2...v0.2.3)
+
+## [v0.2.2](https://github.com/cad/ovpm/tree/v0.2.2) (2017-10-05)
+[Full Changelog](https://github.com/cad/ovpm/compare/v0.2.1...v0.2.2)
+
+## [v0.2.1](https://github.com/cad/ovpm/tree/v0.2.1) (2017-10-04)
+[Full Changelog](https://github.com/cad/ovpm/compare/v0.2.0...v0.2.1)
+
+## [v0.2.0](https://github.com/cad/ovpm/tree/v0.2.0) (2017-10-03)
+[Full Changelog](https://github.com/cad/ovpm/compare/v0.1.18...v0.2.0)
+
+**Fixed bugs:**
+
+- Ubuntu Group needs to be "nogroup" [\#48](https://github.com/cad/ovpm/issues/48)
 
 ## [v0.1.18](https://github.com/GoldenRUS/ovpm/tree/v0.1.18) (2017-09-19)
 [Full Changelog](https://github.com/GoldenRUS/ovpm/compare/v0.1.17...v0.1.18)
