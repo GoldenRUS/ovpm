@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/sirupsen/logrus"
+	"github.com/GoldenRUS/ovpm"
+	"github.com/GoldenRUS/ovpm/permset"
 	"github.com/asaskevich/govalidator"
-	"github.com/cad/ovpm"
-	"github.com/cad/ovpm/permset"
+	"github.com/sirupsen/logrus"
 	gcontext "golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"

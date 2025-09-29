@@ -7,8 +7,8 @@ import (
 
 	passlib "gopkg.in/hlandau/passlib.v1"
 
+	"github.com/GoldenRUS/ovpm/pki"
 	"github.com/asaskevich/govalidator"
-	"github.com/cad/ovpm/pki"
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 	"github.com/sirupsen/logrus"

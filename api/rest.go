@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/GoldenRUS/ovpm/api/pb"
+	"github.com/GoldenRUS/ovpm/bundle"
 	"github.com/asaskevich/govalidator"
-	"github.com/cad/ovpm/api/pb"
-	"github.com/cad/ovpm/bundle"
 	assetfs "github.com/elazarl/go-bindata-assetfs"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
