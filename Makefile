@@ -21,7 +21,7 @@ clean-bundle:
 bundle-webui:
 	@echo Bundling webui
 	yarn --cwd webui/ovpm/ install
-	yarn --cwd webui/ovpm/ build 
+	NODE_OPTIONS="--openssl-legacy-provider" yarn --cwd webui/ovpm/ build
 	cp -r webui/ovpm/build/* bundle
 
 bundle-swagger: proto
