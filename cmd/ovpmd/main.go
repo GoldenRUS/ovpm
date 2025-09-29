@@ -75,10 +75,19 @@ func main() {
 			webIP = "0.0.0.0"
 		}
 
+		if err := ovpm.InitializeFileWatcher(); err != nil {
+			log.Fatal(err)
+		}
+
 		s := newServer(port, webPort, webIP)
 		s.start()
-		s.waitForInterrupt()
+		s.WaitForInterrupt()
 		s.stop()
+
+		// Закрываем FileWatcher при выходе
+		if fw := ovpm.GetFileWatcher(); fw != nil {
+			fw.Close()
+		}
 		return nil
 	}
 	app.Run(os.Args)
@@ -160,7 +169,7 @@ func (s *server) stop() {
 
 }
 
-func (s *server) waitForInterrupt() {
+func (s *server) WaitForInterrupt() {
 	<-s.done
 	go timeout(8 * time.Second)
 }

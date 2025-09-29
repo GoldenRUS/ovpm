@@ -1,9 +1,10 @@
 package api
 
 import (
-	"go.uber.org/thriftrw/ptr"
 	"os"
 	"time"
+
+	"go.uber.org/thriftrw/ptr"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -92,7 +93,7 @@ func (s *UserService) List(ctx context.Context, req *pb.UserListRequest) (*pb.Us
 		return nil, err
 	}
 	for _, user := range users {
-		isConnected, connectedSince, bytesSent, bytesReceived := user.ConnectionStatus()
+		isConnected, connectedSince, bytesSent, bytesReceived, tx, rx := user.ConnectionStatus()
 		ut = append(ut, &pb.UserResponse_User{
 			ServerSerialNumber: user.GetServerSerialNumber(),
 			Username:           user.GetUsername(),
@@ -107,6 +108,8 @@ func (s *UserService) List(ctx context.Context, req *pb.UserListRequest) (*pb.Us
 			BytesReceived:      bytesReceived,
 			ExpiresAt:          user.ExpiresAt().UTC().Format(time.RFC3339),
 			Description:        user.GetDescription(),
+			Tx:                 tx,
+			Rx:                 rx,
 		})
 	}
 
