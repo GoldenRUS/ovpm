@@ -272,8 +272,8 @@ func GetStatisticsByDateRange(startDate, endDate *time.Time, commonNameFilter st
             SUM(bytes_received) as total_bytes_received,
             SUM(bytes_sent) as total_bytes_sent,
             SUM(bytes_received + bytes_sent) as total_bytes,
-            AVG(CAST((julianday(connected_until) - julianday(connected_since)) * 86400.0 AS REAL)) as avg_connection_duration_seconds
-        `)
+			AVG(CAST((strftime('%s', connected_until) - strftime('%s', connected_since)) AS REAL)) 
+				as avg_connection_duration_seconds`)
 
 	if startDate != nil && !startDate.IsZero() {
 		query = query.Where("connected_since > ?", startDate)
@@ -383,8 +383,9 @@ func GetUserStatistics(commonName string, startDate, endDate time.Time) (*UserSt
             SUM(bytes_received) as total_bytes_received,
             SUM(bytes_sent) as total_bytes_sent,
             SUM(bytes_received + bytes_sent) as total_bytes,
-            AVG(CAST((julianday(connected_until) - julianday(connected_since)) * 86400.0 AS REAL)) as avg_connection_duration_seconds,
-            MAX(connected_since) as last_connection
+			AVG(CAST((strftime('%s', connected_until) - strftime('%s', connected_since)) AS REAL)) 
+				as avg_connection_duration_seconds,
+			MAX(connected_since) as last_connection
         `).
 		Where("common_name = ? AND connected_since >= ? AND connected_until <= ?",
 			commonName, startDate, endDate).
