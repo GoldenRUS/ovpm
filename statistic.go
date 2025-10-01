@@ -265,7 +265,6 @@ func GetStatisticList() ([]StatisticSummary, error) {
 func GetStatisticsByDateRange(startDate, endDate *time.Time, commonNameFilter string) ([]StatisticSummary, error) {
 	var results []StatisticSummary
 
-	// Базовый запрос с фильтрацией по дате
 	query := db.Table("db_statistic_models").
 		Select(`
             common_name,
@@ -273,7 +272,7 @@ func GetStatisticsByDateRange(startDate, endDate *time.Time, commonNameFilter st
             SUM(bytes_received) as total_bytes_received,
             SUM(bytes_sent) as total_bytes_sent,
             SUM(bytes_received + bytes_sent) as total_bytes,
-            AVG(EXTRACT(EPOCH FROM (connected_until - connected_since))) as avg_connection_duration_seconds
+            AVG(CAST((julianday(connected_until) - julianday(connected_since)) * 86400.0 AS REAL)) as avg_connection_duration_seconds
         `)
 
 	if startDate != nil && !startDate.IsZero() {
@@ -384,7 +383,7 @@ func GetUserStatistics(commonName string, startDate, endDate time.Time) (*UserSt
             SUM(bytes_received) as total_bytes_received,
             SUM(bytes_sent) as total_bytes_sent,
             SUM(bytes_received + bytes_sent) as total_bytes,
-            AVG(EXTRACT(EPOCH FROM (connected_until - connected_since))) as avg_connection_duration_seconds,
+            AVG(CAST((julianday(connected_until) - julianday(connected_since)) * 86400.0 AS REAL)) as avg_connection_duration_seconds,
             MAX(connected_since) as last_connection
         `).
 		Where("common_name = ? AND connected_since >= ? AND connected_until <= ?",
