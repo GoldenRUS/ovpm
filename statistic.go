@@ -36,13 +36,13 @@ type SpeedStat struct {
 
 type dbStatisticModel struct {
 	gorm.Model
-	userID         uint
-	connectedSince time.Time
-	connectedUntil time.Time
-	bytesReceived  uint64
-	bytesSent      uint64
-	commonName     string
-	realAddress    string
+	UserID         uint
+	ConnectedSince time.Time
+	ConnectedUntil time.Time
+	BytesReceived  uint64
+	BytesSent      uint64
+	CommonName     string
+	RealAddress    string
 }
 
 // GetFileWatcher возвращает глобальный экземпляр FileWatcher
@@ -245,13 +245,13 @@ func onDisconnect(clE clEntry) {
 		}
 	} else {
 		statistic := dbStatisticModel{
-			userID:         user.ID,
-			connectedSince: clE.ConnectedSince,
-			connectedUntil: time.Now(),
-			bytesReceived:  clE.BytesReceived,
-			bytesSent:      clE.BytesSent,
-			commonName:     clE.CommonName,
-			realAddress:    clE.RealAddress,
+			UserID:         user.ID,
+			ConnectedSince: clE.ConnectedSince,
+			ConnectedUntil: time.Now(),
+			BytesReceived:  clE.BytesReceived,
+			BytesSent:      clE.BytesSent,
+			CommonName:     clE.CommonName,
+			RealAddress:    clE.RealAddress,
 		}
 		db.Save(&statistic)
 	}
