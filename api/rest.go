@@ -2,9 +2,10 @@ package api
 
 import (
 	"fmt"
-	"google.golang.org/protobuf/encoding/protojson"
 	"net/http"
 	"strings"
+
+	"google.golang.org/protobuf/encoding/protojson"
 
 	"github.com/GoldenRUS/ovpm/api/pb"
 	"github.com/GoldenRUS/ovpm/bundle"
@@ -52,6 +53,11 @@ func NewRESTServer(grpcPort string) (http.Handler, context.CancelFunc, error) {
 		return nil, cancel, err
 	}
 
+	err = pb.RegisterStatisticServiceHandlerFromEndpoint(ctx, gmux, endPoint, opts)
+	if err != nil {
+		return nil, cancel, err
+	}
+
 	err = pb.RegisterAuthServiceHandlerFromEndpoint(ctx, gmux, endPoint, opts)
 	if err != nil {
 		return nil, cancel, err
@@ -77,6 +83,11 @@ func NewRESTServer(grpcPort string) (http.Handler, context.CancelFunc, error) {
 		BasePath: "/api/docs/",
 		SpecURL:  "/api/specs/auth.swagger.json",
 		Path:     "auth",
+	}, mware)
+	mware = middleware.Redoc(middleware.RedocOpts{
+		BasePath: "/api/docs/",
+		SpecURL:  "/api/specs/statistic.swagger.json",
+		Path:     "statistic",
 	}, mware)
 	mux.Handle("/api/", mware)
 
@@ -149,6 +160,12 @@ func specsHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write(vpnData)
 	case "/api/specs/auth.swagger.json":
 		vpnData, err := bundle.Asset("bundle/auth.swagger.json")
+		if err != nil {
+			logrus.Warn(err)
+		}
+		w.Write(vpnData)
+	case "/api/specs/statistic.swagger.json":
+		vpnData, err := bundle.Asset("bundle/statistic.swagger.json")
 		if err != nil {
 			logrus.Warn(err)
 		}
