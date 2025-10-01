@@ -617,6 +617,42 @@ func (s *NetworkService) Dissociate(ctx context.Context, req *pb.NetworkDissocia
 	return &pb.NetworkDissociateResponse{}, nil
 }
 
+type StatisticService struct {
+	pb.UnimplementedStatisticServiceServer
+}
+
+func (s *StatisticService) List(ctx context.Context, req *pb.StatisticListRequest) (*pb.StatisticResponse, error) {
+	logrus.Debugf("rpc call: statistics list")
+	perms, err := permset.FromContext(ctx)
+	if err != nil {
+		return nil, grpc.Errorf(codes.Unauthenticated, "Can't get permset from context")
+	}
+
+	if !perms.Contains(ovpm.ListStatisticPerm) {
+		return nil, grpc.Errorf(codes.PermissionDenied, "ovpm.ListStatisticPerm is required for this operation.")
+	}
+
+	var Statistic []*pb.StatisticResponse_Statistic
+	res, err := ovpm.GetStatisticList()
+
+	if err != nil {
+		return &pb.StatisticResponse{}, err
+	}
+
+	for _, stat := range res {
+		Statistic = append(Statistic, &pb.StatisticResponse_Statistic{
+			Username:              stat.CommonName,
+			ConnectionCount:       stat.ConnectionCount,
+			TotalBytesReceived:    stat.TotalBytesReceived,
+			TotalBytesSent:        stat.TotalBytesSent,
+			TotalBytes:            stat.TotalBytes,
+			AvgConnectionDuration: int64(stat.AvgConnectionDurationSecs),
+		})
+	}
+
+	return &pb.StatisticResponse{Statistic: Statistic}, nil
+}
+
 // NewRPCServer returns a new gRPC server.
 func NewRPCServer() *grpc.Server {
 	var opts []grpc.ServerOption
@@ -627,5 +663,6 @@ func NewRPCServer() *grpc.Server {
 	pb.RegisterVPNServiceServer(s, &VPNService{})
 	pb.RegisterNetworkServiceServer(s, &NetworkService{})
 	pb.RegisterAuthServiceServer(s, &AuthService{})
+	pb.RegisterStatisticServiceServer(s, &StatisticService{})
 	return s
 }

@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package pb;
+option go_package = "github.com/GoldenRUS/ovpm/api/pb";
+
+import "google/api/annotations.proto";
+
+message StatisticListRequest {}
+
+message StatisticWithFilterRequest {
+  string dateFrom = 1;
+  string dateTo = 2;
+  string username = 3;
+}
+
+service StatisticService {
+  rpc List (StatisticListRequest) returns (StatisticResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/statistic/list"
+      //body: "*"
+    };
+
+  }
+  rpc WFilterList (StatisticWithFilterRequest) returns (StatisticResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/statistic/list"
+      body: "*"
+    };
+  }
+}
+
+
+message StatisticResponse {
+  message Statistic {
+    string username = 1;
+    int64 connection_count = 2;
+    int64 total_bytes_received = 3;
+    int64 total_bytes_sent = 4;
+    int64 total_bytes = 5;
+    int64 avg_connection_duration = 6;
+  }
+
+  repeated Statistic statistic = 1;
+}

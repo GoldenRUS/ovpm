@@ -36,6 +36,7 @@ type dbUserModel struct {
 	Admin              bool
 	AuthToken          string // auth token
 	Description        string
+	Statistic          []dbStatisticModel `gorm:"foreignKey:UserID"`
 }
 
 // User represents a vpn user.

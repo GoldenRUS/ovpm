@@ -665,7 +665,7 @@ const file_vpn_proto_rawDesc = "" +
 	"\x06Status\x12\x14.pb.VPNStatusRequest\x1a\x15.pb.VPNStatusResponse\"\x1a\x82\xd3\xe4\x93\x02\x14\x12\x12/api/v1/vpn/status\x12L\n" +
 	"\x04Init\x12\x12.pb.VPNInitRequest\x1a\x13.pb.VPNInitResponse\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/api/v1/vpn/init\x12T\n" +
 	"\x06Update\x12\x14.pb.VPNUpdateRequest\x1a\x15.pb.VPNUpdateResponse\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/api/v1/vpn/update\x12U\n" +
-	"\aRestart\x12\x15.pb.VPNRestartRequest\x1a\x16.pb.VPNRestartResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\"\x13/api/v1/vpn/restartB\x1cZ\x1agithub.com/GoldenRUS/ovpm/api/pbb\x06proto3"
+	"\aRestart\x12\x15.pb.VPNRestartRequest\x1a\x16.pb.VPNRestartResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\"\x13/api/v1/vpn/restartB\"Z github.com/GoldenRUS/ovpm/api/pbb\x06proto3"
 
 var (
 	file_vpn_proto_rawDescOnce sync.Once

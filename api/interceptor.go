@@ -101,6 +101,11 @@ func AuthUnaryInterceptor(ctx gcontext.Context, req interface{}, info *grpc.Unar
 			return authRequired(ctx, req, handler)
 		case "/pb.NetworkService/Dissociate":
 			return authRequired(ctx, req, handler)
+
+		// StatisticService methods
+		case "/pb.StatisticService/List":
+			return authRequired(ctx, req, handler)
+
 		default:
 			logrus.Debugf("rpc: auth not required for endpoint: '%s'", info.FullMethod)
 		}

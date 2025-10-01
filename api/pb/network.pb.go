@@ -835,7 +835,7 @@ const file_network_proto_rawDesc = "" +
 	"\x12GetAssociatedUsers\x12$.pb.NetworkGetAssociatedUsersRequest\x1a%.pb.NetworkGetAssociatedUsersResponse\"*\x82\xd3\xe4\x93\x02$\x12\"/api/v1/network/getassociatedusers\x12l\n" +
 	"\tAssociate\x12\x1b.pb.NetworkAssociateRequest\x1a\x1c.pb.NetworkAssociateResponse\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/api/v1/network/associate\x12p\n" +
 	"\n" +
-	"Dissociate\x12\x1c.pb.NetworkDissociateRequest\x1a\x1d.pb.NetworkDissociateResponse\"%\x82\xd3\xe4\x93\x02\x1f:\x01*\"\x1a/api/v1/network/dissociateB\x1cZ\x1agithub.com/GoldenRUS/ovpm/api/pbb\x06proto3"
+	"Dissociate\x12\x1c.pb.NetworkDissociateRequest\x1a\x1d.pb.NetworkDissociateResponse\"%\x82\xd3\xe4\x93\x02\x1f:\x01*\"\x1a/api/v1/network/dissociateB\"Z github.com/GoldenRUS/ovpm/api/pbb\x06proto3"
 
 var (
 	file_network_proto_rawDescOnce sync.Once

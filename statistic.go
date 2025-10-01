@@ -1,11 +1,14 @@
 package ovpm
 
 import (
+	"errors"
+	"fmt"
 	"log"
 	"sync"
 	"time"
 
 	"github.com/fsnotify/fsnotify"
+	"github.com/jinzhu/gorm"
 )
 
 var (
@@ -29,6 +32,17 @@ type SpeedStat struct {
 	commonName string
 	tx         float32
 	rx         float32
+}
+
+type dbStatisticModel struct {
+	gorm.Model
+	userID         uint
+	connectedSince time.Time
+	connectedUntil time.Time
+	bytesReceived  uint64
+	bytesSent      uint64
+	commonName     string
+	realAddress    string
 }
 
 // GetFileWatcher возвращает глобальный экземпляр FileWatcher
@@ -125,14 +139,12 @@ func (fw *FileWatcher) getNewValue() {
 
 	data, lastUpdate := ConnectionList()
 
-	// Обработка первого запуска
 	if fw.lastUpdate.IsZero() {
 		fw.data = data
 		fw.lastUpdate = lastUpdate
 		return
 	}
 
-	// Расчет временного интервала
 	dt := lastUpdate.Sub(fw.lastUpdate)
 	if dt <= 0 {
 		dt = time.Second
@@ -143,19 +155,16 @@ func (fw *FileWatcher) getNewValue() {
 	}
 	fw.lastUpdate = lastUpdate
 
-	// Создаем карту старых данных для расчета дельты
 	clMap := make(map[string]clEntry)
 	for _, el := range fw.data {
 		clMap[el.CommonName] = el
 	}
 
-	// Карта для быстрого доступа к индексам статистики
 	statIndexMap := make(map[string]int)
 	for i, stat := range fw.statistic {
 		statIndexMap[stat.commonName] = i
 	}
 
-	// Обновляем статистику для активных пользователей
 	activeUsers := make(map[string]bool)
 	for _, entry := range data {
 		activeUsers[entry.CommonName] = true
@@ -181,7 +190,6 @@ func (fw *FileWatcher) getNewValue() {
 		}
 	}
 
-	// Удаляем статистику для отключившихся пользователей
 	i := 0
 	for _, stat := range fw.statistic {
 		if activeUsers[stat.commonName] {
@@ -191,8 +199,14 @@ func (fw *FileWatcher) getNewValue() {
 	}
 	fw.statistic = fw.statistic[:i]
 
-	// Обновляем данные для следующего сравнения
 	fw.data = data
+
+	for commonName, clEntry := range clMap {
+		if !activeUsers[commonName] {
+			onDisconnect(clEntry)
+		}
+	}
+
 }
 
 // ConnectionList returns information about user's connections to the VPN server.
@@ -206,7 +220,7 @@ func ConnectionList() (list []clEntry, lastUpdate time.Time) {
 		panic(err)
 	}
 
-	cl, _, lU := parseStatusLogWUpdate(f) // client list from OpenVPN status log
+	cl, _, lU := parseStatusLogWUpdate(f)
 
 	return cl, lU
 }
@@ -218,4 +232,180 @@ func (fw *FileWatcher) GetStatistics() []SpeedStat {
 	stats := make([]SpeedStat, len(fw.statistic))
 	copy(stats, fw.statistic)
 	return stats
+}
+
+func onDisconnect(clE clEntry) {
+	var user dbUserModel
+	result := db.Where("username = ?", clE.CommonName).First(&user)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			fmt.Println("User " + clE.CommonName + " not found")
+		} else {
+			fmt.Println("Error:", result.Error)
+		}
+	} else {
+		statistic := dbStatisticModel{
+			userID:         user.ID,
+			connectedSince: clE.ConnectedSince,
+			connectedUntil: time.Now(),
+			bytesReceived:  clE.BytesReceived,
+			bytesSent:      clE.BytesSent,
+			commonName:     clE.CommonName,
+			realAddress:    clE.RealAddress,
+		}
+		db.Save(&statistic)
+	}
+}
+
+func GetStatisticList() ([]StatisticSummary, error) {
+	return GetStatisticsByDateRange(nil, nil, "")
+}
+
+// GetStatisticsByDateRange возвращает статистику за указанный период с группировкой по CommonName
+func GetStatisticsByDateRange(startDate, endDate *time.Time, commonNameFilter string) ([]StatisticSummary, error) {
+	var results []StatisticSummary
+
+	// Базовый запрос с фильтрацией по дате
+	query := db.Table("db_statistic_models").
+		Select(`
+            common_name,
+            COUNT(*) as connection_count,
+            SUM(bytes_received) as total_bytes_received,
+            SUM(bytes_sent) as total_bytes_sent,
+            SUM(bytes_received + bytes_sent) as total_bytes,
+            AVG(EXTRACT(EPOCH FROM (connected_until - connected_since))) as avg_connection_duration_seconds
+        `)
+
+	if startDate != nil && !startDate.IsZero() {
+		query = query.Where("connected_since > ?", startDate)
+	}
+
+	if endDate != nil && !endDate.IsZero() {
+		query = query.Where("connected_since < ?", endDate)
+	}
+
+	if commonNameFilter != "" {
+		query = query.Where("common_name LIKE ?", "%"+commonNameFilter+"%")
+	}
+
+	query = query.Group("common_name")
+
+	result := query.Find(&results)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return results, nil
+}
+
+// StatisticSummary структура для результатов группировки
+type StatisticSummary struct {
+	CommonName                string  `json:"common_name"`
+	ConnectionCount           int64   `json:"connection_count"`
+	TotalBytesReceived        int64   `json:"total_bytes_received"`
+	TotalBytesSent            int64   `json:"total_bytes_sent"`
+	TotalBytes                int64   `json:"total_bytes"`
+	AvgConnectionDurationSecs float64 `json:"avg_connection_duration_seconds"`
+}
+
+// GetDetailedStatistics возвращает детальные записи с различными фильтрами
+func GetDetailedStatistics(filters StatisticFilters) ([]dbStatisticModel, error) {
+	var statistics []dbStatisticModel
+
+	query := db.Model(&dbStatisticModel{})
+
+	if !filters.StartDate.IsZero() {
+		query = query.Where("connected_since >= ?", filters.StartDate)
+	}
+
+	if !filters.EndDate.IsZero() {
+		query = query.Where("connected_until <= ?", filters.EndDate)
+	}
+
+	if filters.CommonName != "" {
+		query = query.Where("common_name = ?", filters.CommonName)
+	}
+
+	if filters.RealAddress != "" {
+		query = query.Where("real_address LIKE ?", "%"+filters.RealAddress+"%")
+	}
+
+	if filters.UserID != 0 {
+		query = query.Where("user_id = ?", filters.UserID)
+	}
+
+	// Сортировка по умолчанию - от новых к старым
+	if filters.SortBy == "" {
+		filters.SortBy = "connected_since"
+	}
+	if filters.SortOrder == "" {
+		filters.SortOrder = "DESC"
+	}
+
+	query = query.Order(filters.SortBy + " " + filters.SortOrder)
+
+	if filters.Limit > 0 {
+		query = query.Limit(filters.Limit)
+	}
+
+	if filters.Offset > 0 {
+		query = query.Offset(filters.Offset)
+	}
+
+	result := query.Find(&statistics)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return statistics, nil
+}
+
+// StatisticFilters структура для фильтров
+type StatisticFilters struct {
+	StartDate   time.Time `form:"start_date"`
+	EndDate     time.Time `form:"end_date"`
+	CommonName  string    `form:"common_name"`
+	RealAddress string    `form:"real_address"`
+	UserID      uint      `form:"user_id"`
+	SortBy      string    `form:"sort_by"`
+	SortOrder   string    `form:"sort_order"`
+	Limit       int       `form:"limit"`
+	Offset      int       `form:"offset"`
+}
+
+// GetUserStatistics возвращает статистику по конкретному пользователю
+func GetUserStatistics(commonName string, startDate, endDate time.Time) (*UserStatistics, error) {
+	var userStats UserStatistics
+
+	// Получаем суммарную статистику
+	result := db.Table("db_statistic_models").
+		Select(`
+            COUNT(*) as total_connections,
+            SUM(bytes_received) as total_bytes_received,
+            SUM(bytes_sent) as total_bytes_sent,
+            SUM(bytes_received + bytes_sent) as total_bytes,
+            AVG(EXTRACT(EPOCH FROM (connected_until - connected_since))) as avg_connection_duration_seconds,
+            MAX(connected_since) as last_connection
+        `).
+		Where("common_name = ? AND connected_since >= ? AND connected_until <= ?",
+			commonName, startDate, endDate).
+		Scan(&userStats)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &userStats, nil
+}
+
+// UserStatistics структура для статистики пользователя
+type UserStatistics struct {
+	Username                  string    `json:"username"`
+	UserID                    uint      `json:"user_id"`
+	TotalConnections          int64     `json:"total_connections"`
+	TotalBytesReceived        int64     `json:"total_bytes_received"`
+	TotalBytesSent            int64     `json:"total_bytes_sent"`
+	TotalBytes                int64     `json:"total_bytes"`
+	AvgConnectionDurationSecs float64   `json:"avg_connection_duration_seconds"`
+	LastConnection            time.Time `json:"last_connection"`
 }

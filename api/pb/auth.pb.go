@@ -224,7 +224,7 @@ const file_auth_proto_rawDesc = "" +
 	"\x05token\x18\x01 \x01(\tR\x05token2\xd4\x01\n" +
 	"\vAuthService\x12T\n" +
 	"\x06Status\x12\x15.pb.AuthStatusRequest\x1a\x16.pb.AuthStatusResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\x12\x13/api/v1/auth/status\x12o\n" +
-	"\fAuthenticate\x12\x1b.pb.AuthAuthenticateRequest\x1a\x1c.pb.AuthAuthenticateResponse\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/api/v1/auth/authenticateB\x1cZ\x1agithub.com/GoldenRUS/ovpm/api/pbb\x06proto3"
+	"\fAuthenticate\x12\x1b.pb.AuthAuthenticateRequest\x1a\x1c.pb.AuthAuthenticateResponse\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/api/v1/auth/authenticateB\"Z github.com/GoldenRUS/ovpm/api/pbb\x06proto3"
 
 var (
 	file_auth_proto_rawDescOnce sync.Once

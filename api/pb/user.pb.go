@@ -841,7 +841,7 @@ const file_user_proto_rawDesc = "" +
 	"\x06Update\x12\x15.pb.UserUpdateRequest\x1a\x10.pb.UserResponse\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/api/v1/user/update\x12Q\n" +
 	"\x06Delete\x12\x15.pb.UserDeleteRequest\x1a\x10.pb.UserResponse\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/api/v1/user/delete\x12N\n" +
 	"\x05Renew\x12\x14.pb.UserRenewRequest\x1a\x10.pb.UserResponse\"\x1d\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/api/v1/user/renew\x12c\n" +
-	"\tGenConfig\x12\x18.pb.UserGenConfigRequest\x1a\x19.pb.UserGenConfigResponse\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/api/v1/user/genconfigB\x1cZ\x1agithub.com/GoldenRUS/ovpm/api/pbb\x06proto3"
+	"\tGenConfig\x12\x18.pb.UserGenConfigRequest\x1a\x19.pb.UserGenConfigResponse\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/api/v1/user/genconfigB\"Z github.com/GoldenRUS/ovpm/api/pbb\x06proto3"
 
 var (
 	file_user_proto_rawDescOnce sync.Once
