@@ -19,16 +19,22 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	StatisticService_List_FullMethodName        = "/pb.StatisticService/List"
-	StatisticService_WFilterList_FullMethodName = "/pb.StatisticService/WFilterList"
+	StatisticService_List_FullMethodName              = "/pb.StatisticService/List"
+	StatisticService_WFilterList_FullMethodName       = "/pb.StatisticService/WFilterList"
+	StatisticService_GetSystemStatus_FullMethodName   = "/pb.StatisticService/GetSystemStatus"
+	StatisticService_GetInterfaces_FullMethodName     = "/pb.StatisticService/GetInterfaces"
+	StatisticService_GetInterfaceStats_FullMethodName = "/pb.StatisticService/GetInterfaceStats"
 )
 
 // StatisticServiceClient is the client API for StatisticService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type StatisticServiceClient interface {
-	List(ctx context.Context, in *StatisticListRequest, opts ...grpc.CallOption) (*StatisticResponse, error)
+	List(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*StatisticResponse, error)
 	WFilterList(ctx context.Context, in *StatisticWithFilterRequest, opts ...grpc.CallOption) (*StatisticResponse, error)
+	GetSystemStatus(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*SystemStatus, error)
+	GetInterfaces(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*NetworkInterfacesResponse, error)
+	GetInterfaceStats(ctx context.Context, in *InterfaceStatsRequest, opts ...grpc.CallOption) (*InterfaceStatsResponse, error)
 }
 
 type statisticServiceClient struct {
@@ -39,7 +45,7 @@ func NewStatisticServiceClient(cc grpc.ClientConnInterface) StatisticServiceClie
 	return &statisticServiceClient{cc}
 }
 
-func (c *statisticServiceClient) List(ctx context.Context, in *StatisticListRequest, opts ...grpc.CallOption) (*StatisticResponse, error) {
+func (c *statisticServiceClient) List(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*StatisticResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(StatisticResponse)
 	err := c.cc.Invoke(ctx, StatisticService_List_FullMethodName, in, out, cOpts...)
@@ -59,12 +65,45 @@ func (c *statisticServiceClient) WFilterList(ctx context.Context, in *StatisticW
 	return out, nil
 }
 
+func (c *statisticServiceClient) GetSystemStatus(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*SystemStatus, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SystemStatus)
+	err := c.cc.Invoke(ctx, StatisticService_GetSystemStatus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *statisticServiceClient) GetInterfaces(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*NetworkInterfacesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(NetworkInterfacesResponse)
+	err := c.cc.Invoke(ctx, StatisticService_GetInterfaces_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *statisticServiceClient) GetInterfaceStats(ctx context.Context, in *InterfaceStatsRequest, opts ...grpc.CallOption) (*InterfaceStatsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(InterfaceStatsResponse)
+	err := c.cc.Invoke(ctx, StatisticService_GetInterfaceStats_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // StatisticServiceServer is the server API for StatisticService service.
 // All implementations must embed UnimplementedStatisticServiceServer
 // for forward compatibility.
 type StatisticServiceServer interface {
-	List(context.Context, *StatisticListRequest) (*StatisticResponse, error)
+	List(context.Context, *EmptyRequest) (*StatisticResponse, error)
 	WFilterList(context.Context, *StatisticWithFilterRequest) (*StatisticResponse, error)
+	GetSystemStatus(context.Context, *EmptyRequest) (*SystemStatus, error)
+	GetInterfaces(context.Context, *EmptyRequest) (*NetworkInterfacesResponse, error)
+	GetInterfaceStats(context.Context, *InterfaceStatsRequest) (*InterfaceStatsResponse, error)
 	mustEmbedUnimplementedStatisticServiceServer()
 }
 
@@ -75,11 +114,20 @@ type StatisticServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedStatisticServiceServer struct{}
 
-func (UnimplementedStatisticServiceServer) List(context.Context, *StatisticListRequest) (*StatisticResponse, error) {
+func (UnimplementedStatisticServiceServer) List(context.Context, *EmptyRequest) (*StatisticResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
 func (UnimplementedStatisticServiceServer) WFilterList(context.Context, *StatisticWithFilterRequest) (*StatisticResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WFilterList not implemented")
+}
+func (UnimplementedStatisticServiceServer) GetSystemStatus(context.Context, *EmptyRequest) (*SystemStatus, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSystemStatus not implemented")
+}
+func (UnimplementedStatisticServiceServer) GetInterfaces(context.Context, *EmptyRequest) (*NetworkInterfacesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInterfaces not implemented")
+}
+func (UnimplementedStatisticServiceServer) GetInterfaceStats(context.Context, *InterfaceStatsRequest) (*InterfaceStatsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInterfaceStats not implemented")
 }
 func (UnimplementedStatisticServiceServer) mustEmbedUnimplementedStatisticServiceServer() {}
 func (UnimplementedStatisticServiceServer) testEmbeddedByValue()                          {}
@@ -103,7 +151,7 @@ func RegisterStatisticServiceServer(s grpc.ServiceRegistrar, srv StatisticServic
 }
 
 func _StatisticService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StatisticListRequest)
+	in := new(EmptyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -115,7 +163,7 @@ func _StatisticService_List_Handler(srv interface{}, ctx context.Context, dec fu
 		FullMethod: StatisticService_List_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StatisticServiceServer).List(ctx, req.(*StatisticListRequest))
+		return srv.(StatisticServiceServer).List(ctx, req.(*EmptyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -138,6 +186,60 @@ func _StatisticService_WFilterList_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _StatisticService_GetSystemStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StatisticServiceServer).GetSystemStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StatisticService_GetSystemStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StatisticServiceServer).GetSystemStatus(ctx, req.(*EmptyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StatisticService_GetInterfaces_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StatisticServiceServer).GetInterfaces(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StatisticService_GetInterfaces_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StatisticServiceServer).GetInterfaces(ctx, req.(*EmptyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StatisticService_GetInterfaceStats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InterfaceStatsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StatisticServiceServer).GetInterfaceStats(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StatisticService_GetInterfaceStats_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StatisticServiceServer).GetInterfaceStats(ctx, req.(*InterfaceStatsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // StatisticService_ServiceDesc is the grpc.ServiceDesc for StatisticService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -152,6 +254,18 @@ var StatisticService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "WFilterList",
 			Handler:    _StatisticService_WFilterList_Handler,
+		},
+		{
+			MethodName: "GetSystemStatus",
+			Handler:    _StatisticService_GetSystemStatus_Handler,
+		},
+		{
+			MethodName: "GetInterfaces",
+			Handler:    _StatisticService_GetInterfaces_Handler,
+		},
+		{
+			MethodName: "GetInterfaceStats",
+			Handler:    _StatisticService_GetInterfaceStats_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

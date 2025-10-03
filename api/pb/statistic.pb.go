@@ -10,6 +10,7 @@ import (
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -22,26 +23,26 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type StatisticListRequest struct {
+type EmptyRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *StatisticListRequest) Reset() {
-	*x = StatisticListRequest{}
+func (x *EmptyRequest) Reset() {
+	*x = EmptyRequest{}
 	mi := &file_statistic_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *StatisticListRequest) String() string {
+func (x *EmptyRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*StatisticListRequest) ProtoMessage() {}
+func (*EmptyRequest) ProtoMessage() {}
 
-func (x *StatisticListRequest) ProtoReflect() protoreflect.Message {
+func (x *EmptyRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_statistic_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -53,8 +54,8 @@ func (x *StatisticListRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use StatisticListRequest.ProtoReflect.Descriptor instead.
-func (*StatisticListRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use EmptyRequest.ProtoReflect.Descriptor instead.
+func (*EmptyRequest) Descriptor() ([]byte, []int) {
 	return file_statistic_proto_rawDescGZIP(), []int{0}
 }
 
@@ -162,6 +163,474 @@ func (x *StatisticResponse) GetStatistic() []*StatisticResponse_Statistic {
 	return nil
 }
 
+type SystemStatus struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CpuUsage      float64                `protobuf:"fixed64,1,opt,name=cpu_usage,json=cpuUsage,proto3" json:"cpu_usage,omitempty"`
+	MemoryTotal   uint64                 `protobuf:"varint,2,opt,name=memory_total,json=memoryTotal,proto3" json:"memory_total,omitempty"`
+	MemoryUsed    uint64                 `protobuf:"varint,3,opt,name=memory_used,json=memoryUsed,proto3" json:"memory_used,omitempty"`
+	SwapTotal     uint64                 `protobuf:"varint,4,opt,name=swap_total,json=swapTotal,proto3" json:"swap_total,omitempty"`
+	SwapUsed      uint64                 `protobuf:"varint,5,opt,name=swap_used,json=swapUsed,proto3" json:"swap_used,omitempty"`
+	LoadAverage   []float64              `protobuf:"fixed64,6,rep,packed,name=load_average,json=loadAverage,proto3" json:"load_average,omitempty"`
+	DiskUsage     []*DiskUsage           `protobuf:"bytes,7,rep,name=disk_usage,json=diskUsage,proto3" json:"disk_usage,omitempty"`
+	Timestamp     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SystemStatus) Reset() {
+	*x = SystemStatus{}
+	mi := &file_statistic_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SystemStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SystemStatus) ProtoMessage() {}
+
+func (x *SystemStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_statistic_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SystemStatus.ProtoReflect.Descriptor instead.
+func (*SystemStatus) Descriptor() ([]byte, []int) {
+	return file_statistic_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *SystemStatus) GetCpuUsage() float64 {
+	if x != nil {
+		return x.CpuUsage
+	}
+	return 0
+}
+
+func (x *SystemStatus) GetMemoryTotal() uint64 {
+	if x != nil {
+		return x.MemoryTotal
+	}
+	return 0
+}
+
+func (x *SystemStatus) GetMemoryUsed() uint64 {
+	if x != nil {
+		return x.MemoryUsed
+	}
+	return 0
+}
+
+func (x *SystemStatus) GetSwapTotal() uint64 {
+	if x != nil {
+		return x.SwapTotal
+	}
+	return 0
+}
+
+func (x *SystemStatus) GetSwapUsed() uint64 {
+	if x != nil {
+		return x.SwapUsed
+	}
+	return 0
+}
+
+func (x *SystemStatus) GetLoadAverage() []float64 {
+	if x != nil {
+		return x.LoadAverage
+	}
+	return nil
+}
+
+func (x *SystemStatus) GetDiskUsage() []*DiskUsage {
+	if x != nil {
+		return x.DiskUsage
+	}
+	return nil
+}
+
+func (x *SystemStatus) GetTimestamp() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Timestamp
+	}
+	return nil
+}
+
+type DiskUsage struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Mount          string                 `protobuf:"bytes,1,opt,name=mount,proto3" json:"mount,omitempty"`
+	Total          uint64                 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	Used           uint64                 `protobuf:"varint,3,opt,name=used,proto3" json:"used,omitempty"`
+	UsedPercentage float64                `protobuf:"fixed64,4,opt,name=used_percentage,json=usedPercentage,proto3" json:"used_percentage,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *DiskUsage) Reset() {
+	*x = DiskUsage{}
+	mi := &file_statistic_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DiskUsage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DiskUsage) ProtoMessage() {}
+
+func (x *DiskUsage) ProtoReflect() protoreflect.Message {
+	mi := &file_statistic_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DiskUsage.ProtoReflect.Descriptor instead.
+func (*DiskUsage) Descriptor() ([]byte, []int) {
+	return file_statistic_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *DiskUsage) GetMount() string {
+	if x != nil {
+		return x.Mount
+	}
+	return ""
+}
+
+func (x *DiskUsage) GetTotal() uint64 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
+func (x *DiskUsage) GetUsed() uint64 {
+	if x != nil {
+		return x.Used
+	}
+	return 0
+}
+
+func (x *DiskUsage) GetUsedPercentage() float64 {
+	if x != nil {
+		return x.UsedPercentage
+	}
+	return 0
+}
+
+type NetworkInterface struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Ip            string                 `protobuf:"bytes,2,opt,name=ip,proto3" json:"ip,omitempty"`
+	Mac           string                 `protobuf:"bytes,3,opt,name=mac,proto3" json:"mac,omitempty"`
+	IsUp          bool                   `protobuf:"varint,4,opt,name=is_up,json=isUp,proto3" json:"is_up,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *NetworkInterface) Reset() {
+	*x = NetworkInterface{}
+	mi := &file_statistic_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NetworkInterface) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NetworkInterface) ProtoMessage() {}
+
+func (x *NetworkInterface) ProtoReflect() protoreflect.Message {
+	mi := &file_statistic_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NetworkInterface.ProtoReflect.Descriptor instead.
+func (*NetworkInterface) Descriptor() ([]byte, []int) {
+	return file_statistic_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *NetworkInterface) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *NetworkInterface) GetIp() string {
+	if x != nil {
+		return x.Ip
+	}
+	return ""
+}
+
+func (x *NetworkInterface) GetMac() string {
+	if x != nil {
+		return x.Mac
+	}
+	return ""
+}
+
+func (x *NetworkInterface) GetIsUp() bool {
+	if x != nil {
+		return x.IsUp
+	}
+	return false
+}
+
+type NetworkInterfacesResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Interfaces    []*NetworkInterface    `protobuf:"bytes,1,rep,name=interfaces,proto3" json:"interfaces,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *NetworkInterfacesResponse) Reset() {
+	*x = NetworkInterfacesResponse{}
+	mi := &file_statistic_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NetworkInterfacesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NetworkInterfacesResponse) ProtoMessage() {}
+
+func (x *NetworkInterfacesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_statistic_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NetworkInterfacesResponse.ProtoReflect.Descriptor instead.
+func (*NetworkInterfacesResponse) Descriptor() ([]byte, []int) {
+	return file_statistic_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *NetworkInterfacesResponse) GetInterfaces() []*NetworkInterface {
+	if x != nil {
+		return x.Interfaces
+	}
+	return nil
+}
+
+type InterfaceStats struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	InterfaceName string                 `protobuf:"bytes,1,opt,name=interface_name,json=interfaceName,proto3" json:"interface_name,omitempty"`
+	TxBytes       uint64                 `protobuf:"varint,2,opt,name=tx_bytes,json=txBytes,proto3" json:"tx_bytes,omitempty"`
+	RxBytes       uint64                 `protobuf:"varint,3,opt,name=rx_bytes,json=rxBytes,proto3" json:"rx_bytes,omitempty"`
+	TxBytesPerSec uint64                 `protobuf:"varint,4,opt,name=tx_bytes_per_sec,json=txBytesPerSec,proto3" json:"tx_bytes_per_sec,omitempty"`
+	RxBytesPerSec uint64                 `protobuf:"varint,5,opt,name=rx_bytes_per_sec,json=rxBytesPerSec,proto3" json:"rx_bytes_per_sec,omitempty"`
+	TxPackets     uint64                 `protobuf:"varint,6,opt,name=tx_packets,json=txPackets,proto3" json:"tx_packets,omitempty"`
+	RxPackets     uint64                 `protobuf:"varint,7,opt,name=rx_packets,json=rxPackets,proto3" json:"rx_packets,omitempty"`
+	Timestamp     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *InterfaceStats) Reset() {
+	*x = InterfaceStats{}
+	mi := &file_statistic_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InterfaceStats) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InterfaceStats) ProtoMessage() {}
+
+func (x *InterfaceStats) ProtoReflect() protoreflect.Message {
+	mi := &file_statistic_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InterfaceStats.ProtoReflect.Descriptor instead.
+func (*InterfaceStats) Descriptor() ([]byte, []int) {
+	return file_statistic_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *InterfaceStats) GetInterfaceName() string {
+	if x != nil {
+		return x.InterfaceName
+	}
+	return ""
+}
+
+func (x *InterfaceStats) GetTxBytes() uint64 {
+	if x != nil {
+		return x.TxBytes
+	}
+	return 0
+}
+
+func (x *InterfaceStats) GetRxBytes() uint64 {
+	if x != nil {
+		return x.RxBytes
+	}
+	return 0
+}
+
+func (x *InterfaceStats) GetTxBytesPerSec() uint64 {
+	if x != nil {
+		return x.TxBytesPerSec
+	}
+	return 0
+}
+
+func (x *InterfaceStats) GetRxBytesPerSec() uint64 {
+	if x != nil {
+		return x.RxBytesPerSec
+	}
+	return 0
+}
+
+func (x *InterfaceStats) GetTxPackets() uint64 {
+	if x != nil {
+		return x.TxPackets
+	}
+	return 0
+}
+
+func (x *InterfaceStats) GetRxPackets() uint64 {
+	if x != nil {
+		return x.RxPackets
+	}
+	return 0
+}
+
+func (x *InterfaceStats) GetTimestamp() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Timestamp
+	}
+	return nil
+}
+
+type InterfaceStatsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Stats         *InterfaceStats        `protobuf:"bytes,1,opt,name=stats,proto3" json:"stats,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *InterfaceStatsResponse) Reset() {
+	*x = InterfaceStatsResponse{}
+	mi := &file_statistic_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InterfaceStatsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InterfaceStatsResponse) ProtoMessage() {}
+
+func (x *InterfaceStatsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_statistic_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InterfaceStatsResponse.ProtoReflect.Descriptor instead.
+func (*InterfaceStatsResponse) Descriptor() ([]byte, []int) {
+	return file_statistic_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *InterfaceStatsResponse) GetStats() *InterfaceStats {
+	if x != nil {
+		return x.Stats
+	}
+	return nil
+}
+
+type InterfaceStatsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	InterfaceName string                 `protobuf:"bytes,1,opt,name=interface_name,json=interfaceName,proto3" json:"interface_name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *InterfaceStatsRequest) Reset() {
+	*x = InterfaceStatsRequest{}
+	mi := &file_statistic_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InterfaceStatsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InterfaceStatsRequest) ProtoMessage() {}
+
+func (x *InterfaceStatsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_statistic_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InterfaceStatsRequest.ProtoReflect.Descriptor instead.
+func (*InterfaceStatsRequest) Descriptor() ([]byte, []int) {
+	return file_statistic_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *InterfaceStatsRequest) GetInterfaceName() string {
+	if x != nil {
+		return x.InterfaceName
+	}
+	return ""
+}
+
 type StatisticResponse_Statistic struct {
 	state                 protoimpl.MessageState `protogen:"open.v1"`
 	Username              string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
@@ -176,7 +645,7 @@ type StatisticResponse_Statistic struct {
 
 func (x *StatisticResponse_Statistic) Reset() {
 	*x = StatisticResponse_Statistic{}
-	mi := &file_statistic_proto_msgTypes[3]
+	mi := &file_statistic_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -188,7 +657,7 @@ func (x *StatisticResponse_Statistic) String() string {
 func (*StatisticResponse_Statistic) ProtoMessage() {}
 
 func (x *StatisticResponse_Statistic) ProtoReflect() protoreflect.Message {
-	mi := &file_statistic_proto_msgTypes[3]
+	mi := &file_statistic_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -250,8 +719,8 @@ var File_statistic_proto protoreflect.FileDescriptor
 
 const file_statistic_proto_rawDesc = "" +
 	"\n" +
-	"\x0fstatistic.proto\x12\x02pb\x1a\x1cgoogle/api/annotations.proto\"\x16\n" +
-	"\x14StatisticListRequest\"l\n" +
+	"\x0fstatistic.proto\x12\x02pb\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x0e\n" +
+	"\fEmptyRequest\"l\n" +
 	"\x1aStatisticWithFilterRequest\x12\x1a\n" +
 	"\bdateFrom\x18\x01 \x01(\tR\bdateFrom\x12\x16\n" +
 	"\x06dateTo\x18\x02 \x01(\tR\x06dateTo\x12\x1a\n" +
@@ -265,10 +734,54 @@ const file_statistic_proto_rawDesc = "" +
 	"\x10total_bytes_sent\x18\x04 \x01(\x03R\x0etotalBytesSent\x12\x1f\n" +
 	"\vtotal_bytes\x18\x05 \x01(\x03R\n" +
 	"totalBytes\x126\n" +
-	"\x17avg_connection_duration\x18\x06 \x01(\x03R\x15avgConnectionDuration2\xd4\x01\n" +
-	"\x10StatisticService\x12W\n" +
-	"\x04List\x12\x18.pb.StatisticListRequest\x1a\x15.pb.StatisticResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/api/v1/statistic/list\x12g\n" +
-	"\vWFilterList\x12\x1e.pb.StatisticWithFilterRequest\x1a\x15.pb.StatisticResponse\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/api/v1/statistic/listB\"Z github.com/GoldenRUS/ovpm/api/pbb\x06proto3"
+	"\x17avg_connection_duration\x18\x06 \x01(\x03R\x15avgConnectionDuration\"\xb6\x02\n" +
+	"\fSystemStatus\x12\x1b\n" +
+	"\tcpu_usage\x18\x01 \x01(\x01R\bcpuUsage\x12!\n" +
+	"\fmemory_total\x18\x02 \x01(\x04R\vmemoryTotal\x12\x1f\n" +
+	"\vmemory_used\x18\x03 \x01(\x04R\n" +
+	"memoryUsed\x12\x1d\n" +
+	"\n" +
+	"swap_total\x18\x04 \x01(\x04R\tswapTotal\x12\x1b\n" +
+	"\tswap_used\x18\x05 \x01(\x04R\bswapUsed\x12!\n" +
+	"\fload_average\x18\x06 \x03(\x01R\vloadAverage\x12,\n" +
+	"\n" +
+	"disk_usage\x18\a \x03(\v2\r.pb.DiskUsageR\tdiskUsage\x128\n" +
+	"\ttimestamp\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\"t\n" +
+	"\tDiskUsage\x12\x14\n" +
+	"\x05mount\x18\x01 \x01(\tR\x05mount\x12\x14\n" +
+	"\x05total\x18\x02 \x01(\x04R\x05total\x12\x12\n" +
+	"\x04used\x18\x03 \x01(\x04R\x04used\x12'\n" +
+	"\x0fused_percentage\x18\x04 \x01(\x01R\x0eusedPercentage\"]\n" +
+	"\x10NetworkInterface\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x0e\n" +
+	"\x02ip\x18\x02 \x01(\tR\x02ip\x12\x10\n" +
+	"\x03mac\x18\x03 \x01(\tR\x03mac\x12\x13\n" +
+	"\x05is_up\x18\x04 \x01(\bR\x04isUp\"Q\n" +
+	"\x19NetworkInterfacesResponse\x124\n" +
+	"\n" +
+	"interfaces\x18\x01 \x03(\v2\x14.pb.NetworkInterfaceR\n" +
+	"interfaces\"\xb7\x02\n" +
+	"\x0eInterfaceStats\x12%\n" +
+	"\x0einterface_name\x18\x01 \x01(\tR\rinterfaceName\x12\x19\n" +
+	"\btx_bytes\x18\x02 \x01(\x04R\atxBytes\x12\x19\n" +
+	"\brx_bytes\x18\x03 \x01(\x04R\arxBytes\x12'\n" +
+	"\x10tx_bytes_per_sec\x18\x04 \x01(\x04R\rtxBytesPerSec\x12'\n" +
+	"\x10rx_bytes_per_sec\x18\x05 \x01(\x04R\rrxBytesPerSec\x12\x1d\n" +
+	"\n" +
+	"tx_packets\x18\x06 \x01(\x04R\ttxPackets\x12\x1d\n" +
+	"\n" +
+	"rx_packets\x18\a \x01(\x04R\trxPackets\x128\n" +
+	"\ttimestamp\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\"B\n" +
+	"\x16InterfaceStatsResponse\x12(\n" +
+	"\x05stats\x18\x01 \x01(\v2\x12.pb.InterfaceStatsR\x05stats\">\n" +
+	"\x15InterfaceStatsRequest\x12%\n" +
+	"\x0einterface_name\x18\x01 \x01(\tR\rinterfaceName2\xa6\x04\n" +
+	"\x10StatisticService\x12O\n" +
+	"\x04List\x12\x10.pb.EmptyRequest\x1a\x15.pb.StatisticResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/api/v1/statistic/list\x12g\n" +
+	"\vWFilterList\x12\x1e.pb.StatisticWithFilterRequest\x1a\x15.pb.StatisticResponse\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/api/v1/statistic/list\x12^\n" +
+	"\x0fGetSystemStatus\x12\x10.pb.EmptyRequest\x1a\x10.pb.SystemStatus\"'\x82\xd3\xe4\x93\x02!\x12\x1f/api/v1/statistic/system/status\x12n\n" +
+	"\rGetInterfaces\x12\x10.pb.EmptyRequest\x1a\x1d.pb.NetworkInterfacesResponse\",\x82\xd3\xe4\x93\x02&\x12$/api/v1/statistic/network/interfaces\x12\x87\x01\n" +
+	"\x11GetInterfaceStats\x12\x19.pb.InterfaceStatsRequest\x1a\x1a.pb.InterfaceStatsResponse\";\x82\xd3\xe4\x93\x025\x123/statistic/network/interface/{interface_name}/statsB\"Z github.com/GoldenRUS/ovpm/api/pbb\x06proto3"
 
 var (
 	file_statistic_proto_rawDescOnce sync.Once
@@ -282,24 +795,43 @@ func file_statistic_proto_rawDescGZIP() []byte {
 	return file_statistic_proto_rawDescData
 }
 
-var file_statistic_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_statistic_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_statistic_proto_goTypes = []any{
-	(*StatisticListRequest)(nil),        // 0: pb.StatisticListRequest
+	(*EmptyRequest)(nil),                // 0: pb.EmptyRequest
 	(*StatisticWithFilterRequest)(nil),  // 1: pb.StatisticWithFilterRequest
 	(*StatisticResponse)(nil),           // 2: pb.StatisticResponse
-	(*StatisticResponse_Statistic)(nil), // 3: pb.StatisticResponse.Statistic
+	(*SystemStatus)(nil),                // 3: pb.SystemStatus
+	(*DiskUsage)(nil),                   // 4: pb.DiskUsage
+	(*NetworkInterface)(nil),            // 5: pb.NetworkInterface
+	(*NetworkInterfacesResponse)(nil),   // 6: pb.NetworkInterfacesResponse
+	(*InterfaceStats)(nil),              // 7: pb.InterfaceStats
+	(*InterfaceStatsResponse)(nil),      // 8: pb.InterfaceStatsResponse
+	(*InterfaceStatsRequest)(nil),       // 9: pb.InterfaceStatsRequest
+	(*StatisticResponse_Statistic)(nil), // 10: pb.StatisticResponse.Statistic
+	(*timestamppb.Timestamp)(nil),       // 11: google.protobuf.Timestamp
 }
 var file_statistic_proto_depIdxs = []int32{
-	3, // 0: pb.StatisticResponse.statistic:type_name -> pb.StatisticResponse.Statistic
-	0, // 1: pb.StatisticService.List:input_type -> pb.StatisticListRequest
-	1, // 2: pb.StatisticService.WFilterList:input_type -> pb.StatisticWithFilterRequest
-	2, // 3: pb.StatisticService.List:output_type -> pb.StatisticResponse
-	2, // 4: pb.StatisticService.WFilterList:output_type -> pb.StatisticResponse
-	3, // [3:5] is the sub-list for method output_type
-	1, // [1:3] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	10, // 0: pb.StatisticResponse.statistic:type_name -> pb.StatisticResponse.Statistic
+	4,  // 1: pb.SystemStatus.disk_usage:type_name -> pb.DiskUsage
+	11, // 2: pb.SystemStatus.timestamp:type_name -> google.protobuf.Timestamp
+	5,  // 3: pb.NetworkInterfacesResponse.interfaces:type_name -> pb.NetworkInterface
+	11, // 4: pb.InterfaceStats.timestamp:type_name -> google.protobuf.Timestamp
+	7,  // 5: pb.InterfaceStatsResponse.stats:type_name -> pb.InterfaceStats
+	0,  // 6: pb.StatisticService.List:input_type -> pb.EmptyRequest
+	1,  // 7: pb.StatisticService.WFilterList:input_type -> pb.StatisticWithFilterRequest
+	0,  // 8: pb.StatisticService.GetSystemStatus:input_type -> pb.EmptyRequest
+	0,  // 9: pb.StatisticService.GetInterfaces:input_type -> pb.EmptyRequest
+	9,  // 10: pb.StatisticService.GetInterfaceStats:input_type -> pb.InterfaceStatsRequest
+	2,  // 11: pb.StatisticService.List:output_type -> pb.StatisticResponse
+	2,  // 12: pb.StatisticService.WFilterList:output_type -> pb.StatisticResponse
+	3,  // 13: pb.StatisticService.GetSystemStatus:output_type -> pb.SystemStatus
+	6,  // 14: pb.StatisticService.GetInterfaces:output_type -> pb.NetworkInterfacesResponse
+	8,  // 15: pb.StatisticService.GetInterfaceStats:output_type -> pb.InterfaceStatsResponse
+	11, // [11:16] is the sub-list for method output_type
+	6,  // [6:11] is the sub-list for method input_type
+	6,  // [6:6] is the sub-list for extension type_name
+	6,  // [6:6] is the sub-list for extension extendee
+	0,  // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_statistic_proto_init() }
@@ -313,7 +845,7 @@ func file_statistic_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_statistic_proto_rawDesc), len(file_statistic_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
