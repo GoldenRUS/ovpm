@@ -276,6 +276,27 @@ export default class AdminDashboard extends React.Component {
         this.setState({logout: true});
     }
 
+    handleGetSystemStatusFailure(error) {
+        console.error("Failed to get system status:", error);
+        if (error.response && error.response.status === 401) {
+            this.handleAuthFailure(error);
+        }
+    }
+
+    handleGetNetworkInterfacesFailure(error) {
+        console.error("Failed to get network interfaces:", error);
+        if (error.response && error.response.status === 401) {
+            this.handleAuthFailure(error);
+        }
+    }
+
+    handleGetInterfaceStatsFailure(error) {
+        console.error("Failed to get interface stats:", error);
+        if (error.response && error.response.status === 401) {
+            this.handleAuthFailure(error);
+        }
+    }
+
     handleCreateNewUser(e) {
         console.log("create new user");
         this.setState({modal: CREATINGNEWUSER});

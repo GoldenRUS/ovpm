@@ -105,6 +105,12 @@ func AuthUnaryInterceptor(ctx gcontext.Context, req interface{}, info *grpc.Unar
 		// StatisticService methods
 		case "/pb.StatisticService/List":
 			return authRequired(ctx, req, handler)
+		case "/pb.StatisticService/GetSystemStatus":
+			return authRequired(ctx, req, handler)
+		case "/pb.StatisticService/GetInterfaces":
+			return authRequired(ctx, req, handler)
+		case "/pb.StatisticService/GetInterfaceStats":
+			return authRequired(ctx, req, handler)
 
 		default:
 			logrus.Debugf("rpc: auth not required for endpoint: '%s'", info.FullMethod)

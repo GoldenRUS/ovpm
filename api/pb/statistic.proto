@@ -41,7 +41,7 @@ service StatisticService {
   }
   rpc GetInterfaceStats (InterfaceStatsRequest) returns (InterfaceStatsResponse) {
     option (google.api.http) = {
-      get: "/statistic/network/interface/{interface_name}/stats"
+      get: "/api/v1/statistic/network/interface/{interface_name}/stats"
     };
   }
 
