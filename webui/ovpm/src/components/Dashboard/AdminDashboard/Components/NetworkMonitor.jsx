@@ -61,19 +61,37 @@ class NetworkMonitor extends React.Component {
     };
 
     updateStats = (stats) => {
-        if (!stats) return;
+        if (!stats) {
+            console.warn("updateStats called with undefined stats");
+            return;
+        }
 
+        // Конвертируем ВСЕ строковые числа в настоящие числа
+        const safeStats = {
+            interface_name: stats.interface_name,
+            tx_bytes: Number(stats.tx_bytes) || 0,
+            rx_bytes: Number(stats.rx_bytes) || 0,
+            tx_bytes_per_sec: Number(stats.tx_bytes_per_sec) || 0,
+            rx_bytes_per_sec: Number(stats.rx_bytes_per_sec) || 0,
+            tx_packets: Number(stats.tx_packets) || 0,
+            rx_packets: Number(stats.rx_packets) || 0,
+            timestamp: stats.timestamp
+        };
+
+        console.log("Processed stats:", safeStats); // Для отладки
+
+        this.setState({ currentStats: safeStats });
+
+        // Обновление истории (убедитесь что используете числа)
         this.setState(prevState => {
             const newLabels = [...prevState.trafficHistory.labels];
             const newUpload = [...prevState.trafficHistory.upload];
             const newDownload = [...prevState.trafficHistory.download];
 
-            // Добавляем новые данные
             newLabels.push(new Date().toLocaleTimeString());
-            newUpload.push(stats.tx_bytes_per_sec / 1024 / 1024); // MB/s
-            newDownload.push(stats.rx_bytes_per_sec / 1024 / 1024); // MB/s
+            newUpload.push(safeStats.tx_bytes_per_sec / 1024 / 1024); // MB/s
+            newDownload.push(safeStats.rx_bytes_per_sec / 1024 / 1024); // MB/s
 
-            // Удаляем старые данные если превышен лимит
             if (newLabels.length > this.historySize) {
                 newLabels.shift();
                 newUpload.shift();
@@ -81,7 +99,6 @@ class NetworkMonitor extends React.Component {
             }
 
             return {
-                currentStats: stats,
                 trafficHistory: {
                     labels: newLabels,
                     upload: newUpload,

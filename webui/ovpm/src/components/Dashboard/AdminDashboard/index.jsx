@@ -667,7 +667,7 @@ export default class AdminDashboard extends React.Component {
     handleGetInterfaceStatsSuccess(res) {
         this.setState({interfaceStats: res.data});
         if (this.networkMonitorRef.current) {
-            this.networkMonitorRef.current.updateStats(res.data);
+            this.networkMonitorRef.current.updateStats(res.data.stats);
         }
     }
 

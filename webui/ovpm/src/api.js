@@ -41,6 +41,6 @@ export const endpoints = {
     }, networkInterfaces: {
         path: "/statistic/network/interfaces", method: "GET"
     }, interfaceStats: {
-        path: "/statistic/network/interface/:name/stats", method: "GET"
+        path: "/statistic/network/interface/{name}/stats", method: "GET"
     }
 };

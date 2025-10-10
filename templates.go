@@ -363,4 +363,5 @@ verb 3
 # sequential messages of the same message
 # category will be output to the log.
 ;mute 20
+management 127.0.0.1 7505 
 `
