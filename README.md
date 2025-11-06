@@ -110,8 +110,8 @@ another computer.
 **Since v0.2.20**: Use `--web-ip` parameter to specify REST API binding address for enhanced security and reverse proxy support.
 
 ```bash
-./ovpm --web-ip 192.168.0.100  # Bind to specific IP
-./ovpm --web-ip 127.0.0.1      # Localhost only
+./ovpmd --web-ip 192.168.0.100  # Bind to specific IP
+./ovpmd --web-ip 127.0.0.1      # Localhost only
 ```
 Default: 0.0.0.0 (all interfaces)
 
